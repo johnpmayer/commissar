@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/hoisie/web.go"
+	"github.com/hoisie/web"
 	"io"
 	"os"
 )
@@ -25,6 +25,14 @@ func scriptHandler(ctx *web.Context, path string) {
 	file, err := os.Open(path)
 	check(err)
 	ctx.ContentType("js")
+	_, err = io.Copy(ctx, file)
+	check(err)
+}
+
+func pngHandler(ctx *web.Context, path string) {
+	file, err := os.Open(path)
+	check(err)
+	ctx.ContentType("png")
 	_, err = io.Copy(ctx, file)
 	check(err)
 }
@@ -61,6 +69,7 @@ func main() {
 
 	// Static routers
 	web.Get("/", gamePageHandler)
+	web.Get("/(images/.*[.]png)", pngHandler)
 	web.Get("/(scripts/.*[.]js)", scriptHandler)
 	web.Get("/(shaders/.*[.]vert)", vertexShaderHandler)
 	web.Get("/(shaders/.*[.]frag)", fragmentShaderHandler)

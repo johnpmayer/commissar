@@ -1,19 +1,69 @@
 <!DOCTYPE html>
 <html>
+  
   <head>
-    <title>Hegemony</title>
+    <title>Commissar</title>
+    <style type="text/css">
+      .center {
+          margin-left:auto;
+          margin-right:auto;
+      }
+      
+      .tight {
+          display: table;
+      }
+      
+      .vPanel {
+          float:left;
+      }
+      
+      .sidebar {
+          width:200px;
+          height:auto;
+      }
+      
+      .grey {
+          background-color:#AAA;
+      }
+      
+      #header {
+          padding-top: 10px;
+          padding-left: 10px;
+      }
+      
+      h3 {
+          padding-left: 20px;
+      }
+      
+      #main {
+
+      }
+    </style>
     <script data-main="scripts/main"
-            src="scripts/require-jquery.js"></script>
+            src="scripts/require-jquery.js">
+    </script>
   </head>
+  
   <body>
-    <div id="main">
-      <div id="leftbar"></div>
-      <div id="canvas_window">
-        <canvas id="c" height="600" width="600"></canvas>
-      </div>
-      <div id="rightbar"></div>
-      <div id="camera_log"></div>
-      <div id="mouse_log"></div>
+    
+    <div id="header" class="center tight grey">
+      <img src="images/header_logo.png"></img>
     </div>
+    
+    <div id="main" class="center tight">
+      <div id="leftbar" class="sidebar vPanel grey">
+        <h3>Left</h3>
+        <div id="chat"></div>
+      </div>
+      <div id="canvas" class="center vPanel">
+        <canvas id="c" width="640" height="480"></canvas>
+      </div>
+      <div id="rightbar" class="sidebar vPanel grey">
+        <h3>Right</h3>
+        <div id="log"></div>
+      </div>
+    </div>
+    
   </body>
+  
 </html>

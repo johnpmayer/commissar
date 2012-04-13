@@ -9,7 +9,11 @@ require(
       
       //$('body').append("Hello, World!");
       var c = $('#c')[0];
+      var height = c.height;
+      var width = c.width;
+      var aspect = width/height;
       var gl = c.getContext("experimental-webgl");
+      matrix.projectionMatrix().makePerspective(45, aspect, 0.01, 100)
       if (!gl) throw "WebGL failed to get context";
       
       gl.enable(gl.DEPTH_TEST);
@@ -109,21 +113,23 @@ require(
                          var log = "Clicked the canvas: " + ev.offsetX + " " + ev.offsetY
                          
                          // canvas specific
-                         var fsx = ev.offsetX / 600
-                         var fsy = ev.offsetY / 600
+                         var fsx = ev.offsetX / width
+                         var fsy = ev.offsetY / height
                          
                          var cameraPos = vector.fromSpherical(zoom, theta, phi)
                          var upVector = vector.fromSpherical(1, theta, phi + (Math.PI / 2))
                          var viewingDir = cameraPos.scale(-1).normalize()
                          
-                         var halfViewAngle = Math.PI / 8
+                         //var halfViewAngle = Math.PI / 8
+                         var vHalfAngle = Math.PI / 8 // 22.5 degrees
+                         var hHalfAngle = Math.atan(Math.tan(vHalfAngle) * aspect)
                          
                          var a = viewingDir.cross(upVector).normalize()
                          var b = a.cross(viewingDir).normalize()
                          var m = cameraPos.add(viewingDir)
                          
-                         var h = a.scale(viewingDir.magnitude()).scale(halfViewAngle)
-                         var v = b.scale(viewingDir.magnitude()).scale(halfViewAngle)
+                         var h = a.scale(viewingDir.magnitude()).scale(hHalfAngle)
+                         var v = b.scale(viewingDir.magnitude()).scale(vHalfAngle)
                          var p = m.add(h.scale(2*fsx - 1)).sub(v.scale(2*fsy - 1))
                          
                          var pcp = p.sub(cameraPos)

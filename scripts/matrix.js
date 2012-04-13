@@ -213,61 +213,6 @@ define(["vector"],function(vector) {
       this.d = m4x4;
     }
     
-    //,
-    
-    /*
-    computeInverse : function() {
-      
-      var inv = new Matrix4x4();
-      
-      inv.d[0] = this.d[5] * this.d[10] * this.d[15] - this.d[5] * this.d[11] * this.d[14] - this.d[9] * this.d[6] * this.d[15] +
-        this.d[9] * this.d[7] * this.d[14] + this.d[13] * this.d[6] * this.d[11] - this.d[13] * this.d[7] * this.d[10];
-      inv.d[4] = -this.d[4] * this.d[10] * this.d[15] + this.d[4] * this.d[11] * this.d[14] + this.d[8] * this.d[6] * this.d[15] -
-        this.d[8] * this.d[7] * this.d[14] - this.d[12] * this.d[6] * this.d[11] + this.d[12] * this.d[7] * this.d[10];
-      inv.d[8] = this.d[4] * this.d[9] * this.d[15] - this.d[4] * this.d[11] * this.d[13] - this.d[8] * this.d[5] * this.d[15] +
-        this.d[8] * this.d[7] * this.d[13] + this.d[12] * this.d[5] * this.d[11] - this.d[12] * this.d[7] * this.d[9];
-      inv.d[12] = -this.d[4] * this.d[9] * this.d[14] + this.d[4] * this.d[10] * this.d[13] + this.d[8] * this.d[5] * this.d[14] -
-        this.d[8] * this.d[6] * this.d[13] - this.d[12] * this.d[5] * this.d[10] + this.d[12] * this.d[6] * this.d[9];
-      inv.d[1] = -this.d[1] * this.d[10] * this.d[15] + this.d[1] * this.d[11] * this.d[14] + this.d[9] * this.d[2] * this.d[15] -
-        this.d[9] * this.d[3] * this.d[14] - this.d[13] * this.d[2] * this.d[11] + this.d[13] * this.d[3] * this.d[10];
-      inv.d[5] = this.d[0] * this.d[10] * this.d[15] - this.d[0] * this.d[11] * this.d[14] - this.d[8] * this.d[2] * this.d[15] +
-        this.d[8] * this.d[3] * this.d[14] + this.d[12] * this.d[2] * this.d[11] - this.d[12] * this.d[3] * this.d[10];
-      inv.d[9] = -this.d[0] * this.d[9] * this.d[15] + this.d[0] * this.d[11] * this.d[13] + this.d[8] * this.d[1] * this.d[15] -
-        this.d[8] * this.d[3] * this.d[13] - this.d[12] * this.d[1] * this.d[11] + this.d[12] * this.d[3] * this.d[9];
-      inv.d[13] = this.d[0] * this.d[9] * this.d[14] - this.d[0] * this.d[10] * this.d[13] - this.d[8] * this.d[1] * this.d[14] +
-        this.d[8] * this.d[2] * this.d[13] + this.d[12] * this.d[1] * this.d[10] - this.d[12] * this.d[2] * this.d[9];
-      inv.d[2] = this.d[1] * this.d[6] * this.d[15] - this.d[1] * this.d[7] * this.d[14] - this.d[5] * this.d[2] * this.d[15] +
-        this.d[5] * this.d[3] * this.d[14] + this.d[13] * this.d[2] * this.d[7] - this.d[13] * this.d[3] * this.d[6];
-      inv.d[6] = -this.d[0] * this.d[6] * this.d[15] + this.d[0] * this.d[7] * this.d[14] + this.d[4] * this.d[2] * this.d[15] -
-        this.d[4] * this.d[3] * this.d[14] - this.d[12] * this.d[2] * this.d[7] + this.d[12] * this.d[3] * this.d[6];
-      inv.d[10] = this.d[0] * this.d[5] * this.d[15] - this.d[0] * this.d[7] * this.d[13] - this.d[4] * this.d[1] * this.d[15] +
-        this.d[4] * this.d[3] * this.d[13] + this.d[12] * this.d[1] * this.d[7] - this.d[12] * this.d[3] * this.d[5];
-      inv.d[14] = -this.d[0] * this.d[5] * this.d[14] + this.d[0] * this.d[6] * this.d[13] + this.d[4] * this.d[1] * this.d[14] -
-        this.d[4] * this.d[2] * this.d[13] - this.d[12] * this.d[1] * this.d[6] + this.d[12] * this.d[2] * this.d[5];
-      inv.d[3] = -this.d[1] * this.d[6] * this.d[11] + this.d[1] * this.d[7] * this.d[10] + this.d[5] * this.d[2] * this.d[11] -
-        this.d[5] * this.d[3] * this.d[10] - this.d[9] * this.d[2] * this.d[7] + this.d[9] * this.d[3] * this.d[6];
-      inv.d[7] = this.d[0] * this.d[6] * this.d[11] - this.d[0] * this.d[7] * this.d[10] - this.d[4] * this.d[2] * this.d[11] +
-        this.d[4] * this.d[3] * this.d[10] + this.d[8] * this.d[2] * this.d[7] - this.d[8] * this.d[3] * this.d[6];
-      inv.d[11] = -this.d[0] * this.d[5] * this.d[11] + this.d[0] * this.d[7] * this.d[9] + this.d[4] * this.d[1] * this.d[11] -
-        this.d[4] * this.d[3] * this.d[9] - this.d[8] * this.d[1] * this.d[7] + this.d[8] * this.d[3] * this.d[5];
-      inv.d[15] = this.d[0] * this.d[5] * this.d[10] - this.d[0] * this.d[6] * this.d[9] - this.d[4] * this.d[1] * this.d[10] +
-        this.d[4] * this.d[2] * this.d[9] + this.d[8] * this.d[1] * this.d[6] - this.d[8] * this.d[2] * this.d[5];
-      
-      var det = this.d[0] * inv.d[0] + this.d[1] * inv.d[4] + this.d[2] * inv.d[8] + this.d[3] * inv.d[12];
-      
-      if(det == 0) {return null}
-      
-      var recDet = 1/det
-      
-      for (var i = 0; i < 16; i += 1) {
-        inv.d[i] *= recDet
-      }
-      
-      return inv;
-      
-    }
-    */
-    
   };
   
   var globalGLMatrixState = {
@@ -276,12 +221,12 @@ define(["vector"],function(vector) {
     viewMatrix : new Matrix4x3(),
     modelStackTop : 0
   };
-  
+    
   function modelMatrix() {
     return globalGLMatrixState.modelMatrix[globalGLMatrixState.modelStackTop];
   }
   
-  function projectionMatrix () {
+  function projectionMatrix() {
     return globalGLMatrixState.projectionMatrix;
   }
   
