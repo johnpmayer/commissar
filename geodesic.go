@@ -1,11 +1,10 @@
-package geodesic
+package main
 
 import (
 	"crypto/rand"
 	"fmt"
 	. "math"
 	"math/big"
-	. "vector"
 )
 
 type UVIndex struct {

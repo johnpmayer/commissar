@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"geodesic"
 	"github.com/hoisie/web.go"
 	"io"
 	"os"
@@ -48,7 +47,7 @@ func fragmentShaderHandler(ctx *web.Context, path string) {
 
 func main() {
 
-	globe := geodesic.MakeGeodesic(1, 3)
+	globe := MakeGeodesic(1, 3)
 
 	globeHandler := func(ctx *web.Context) {
 
