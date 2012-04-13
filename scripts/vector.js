@@ -1,7 +1,7 @@
 
 // vector
 
-define(["mjs"], function(mjs) {
+define(["lib/mjs"], function(mjs) {
 
   var Vector3 = function (x,y,z) {
     

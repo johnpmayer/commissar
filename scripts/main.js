@@ -1,6 +1,6 @@
 
 require(
-  ["jquery","utils","geodesic","mesh","scene","matrix","vector","mjs"], 
+  ["jquery","utils","geodesic","mesh","scene","matrix","vector","lib/mjs"], 
   function($,utils,geodesic,mesh,scene,matrix,vector,mjs){
     
     window.onerror = function(ev){alert("Error:" + ev)};
