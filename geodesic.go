@@ -21,6 +21,7 @@ type GeoNode struct {
 	Point      *Vector3
 	Locations  []UVIndex
 	Elevation  int
+	*BoardSpace
 }
 
 const MAX_ELEVATION = 1000
@@ -314,7 +315,7 @@ func (p *Geodesic) doubleFrequency() {
 			node2 := v_array_b[v+2]
 			testNode1 := v_array_a[v+2]
 			testNode2 := v_array_b[v]
-			if testNode1 != nil && testNode2 != nil && 
+			if testNode1 != nil && testNode2 != nil &&
 				node1 != nil && node2 != nil {
 
 				node := interpolate(f, u+1, v+1, node1, node2)

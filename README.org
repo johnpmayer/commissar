@@ -1,0 +1,52 @@
+
+* Commissar
+** Game board
+   Commissar is played on a globe, divided into spaces. The globe can
+   be rotated, tilted, and zoomed. 
+*** Geometry
+    The size of the game board can be
+    configured at the start, and the number of spaces follows the
+    formula (10 * 2^2n + 2), for n > 0.
+    The game board consists of 12 pentagons and some additional
+    number of hexagons, depending on the granularity of the game
+    board. 
+*** Geography, Meteorology
+    Each space has some immutable geographic properties that are
+    determined when the game board terrain is generated. The primary
+    attribute is elevation, which determines if the space represents
+    lowland, mountains, or open ocean. Latitude can further
+    determine lowland climate or icy waterways.
+*** Anthropology
+    Each space is home to a number of inhabitants. Further details
+    will be discussed in the section titled Population. In addition to
+    civilians, spaces can garrison any amount of armed forces,
+    provided that the local economy is capable of handling the
+    upkeep. Further details of military units will be discussed in the
+    section Military.
+** Player Characters
+   The majority of the time spent in game will be directly controlling
+   player characters. These agents represent the leaders of civilian
+   populations, officers in the armed forces, economic tycoons, and
+   perhaps other, more specialized influential persons.
+   Players own any number of player characters, and do not need to
+   reveal the true owner of the character.
+*** Political clout
+    Player characters who enter politics are in the business of making 
+    people happy. Successfully taking credit for actions that please a
+    populous builds influence that can be used to gain access to
+    public assets. A number of different political structures should
+    be supported.
+*** Military brass
+    Player characters who are part of a standing armed service are the
+    sole direct access point to carrying out planned military
+    action. To mass larger forces you need to rise in rank, but doing
+    so cuts off the direct control of military units, creating the
+    need for a disciplined heirarchy of player characters, who don't
+    neccessarily all belong to the same player.
+** Population
+*** Needs (Standard of living)
+*** Happiness with current regime
+*** Economic resources
+*** Revenue
+** Military
+*** 

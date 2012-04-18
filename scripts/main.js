@@ -19,10 +19,11 @@ require(
       gl.enable(gl.DEPTH_TEST);
       gl.clearColor(0,0,0,1);
       
-      var geoMesh = new mesh.Mesh(gl)
-      var geoScene = new scene.DAGNode([new scene.Geometry(geoMesh)])
+      var geoMesh = new mesh.Mesh(gl);
+      var selectionNode = new scene.DAGNode([]);
+      var geoScene = new scene.DAGNode([new scene.Geometry(geoMesh), selectionNode]);
       var camera = new matrix.Matrix4x3();
-      var theta = 0, phi = 0, zoom = 5
+      var theta = 0, phi = 0, zoom = 5;
       
       var keyMappings = {'37':'spinleft',
                          '38':'tiltdown',
@@ -88,22 +89,21 @@ require(
       
       utils.loadFile("globe", 
                      function(responseText){
-                       var geo = geodesic.initGeodesic(JSON.parse(responseText))
+                       var geo = geodesic.initGeodesic(JSON.parse(responseText));
                        
-                       var count = 0
-                       var neighborFreq = [0,0,0,0,0,0,0,0,0]
+                       var count = 0;
+                       var neighborFreq = [0,0,0,0,0,0,0,0,0];
                        
                        for (var u = 0; u < geo.U_Array.length; u += 1) {
-                         var v_array = geo.U_Array[u]
+                         var v_array = geo.U_Array[u];
                          for (var v = 0; v < v_array.length; v += 1) {
-                           var node = v_array[v]
+                           var node = v_array[v];
                            if (node && 
                                node.Locations[0].U === u &&
                                node.Locations[0].V === v) {
-                             count += 1
-                             var numNeighbors = geo.nodeNeighbors(node).length
-
-                             neighborFreq[numNeighbors] += 1
+                             count += 1;
+                             var numNeighbors = geo.nodeNeighbors(node).length;
+                             neighborFreq[numNeighbors] += 1;
                            }
                          }
                        }
@@ -157,14 +157,39 @@ require(
                            
                            var closestNode = geo.closestNode(intersect)
                            
-                           console.log(geoScene.children)
+                           var pickedLocation = closestNode.Locations[0]
+                           var pickedU = pickedLocation.U
+                           var pickedV = pickedLocation.V
+                           
+                           $.post(
+                             "/click",
+                             {
+                               u:pickedU,
+                               v:pickedV
+                             },
+                             function(data){
+                               if (data) {
+                                 detail= "";
+                                 detail += "<h4>Space (" + pickedU + ", " + pickedV + ")</h4>";
+                                 detail += "<p>Player: " + data.PlayerID + "</p>";
+                                 detail += "<p>Armies: " + data.Armies + "</p>";
+                                 detail += "<p>Elevation: " + closestNode.Elevation + "</p>";
+                                 $("#detail").html(detail)
+                                 
+                               }
+                               console.log(data);
+                               },
+                             "json"
+                           );
+                           
+                           //console.log(geoScene.children)
                            
                            var borderMesh = new mesh.Mesh(gl)
                            
                            geo.generateBorderMesh(borderMesh, closestNode, function(){
-                             geoScene.children.push(new scene.Geometry(borderMesh))
+                             selectionNode.children = [new scene.Geometry(borderMesh)]
                            })
-                           m
+                           
                            log += "<br>Node: " + JSON.stringify(closestNode)
                            
                          } else {

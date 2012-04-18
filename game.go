@@ -2,9 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/hoisie/web"
 	"io"
 	"os"
+	"strconv"
 )
 
 func check(err error) {
@@ -67,6 +69,37 @@ func main() {
 
 	}
 
+	clickHandler := func(ctx *web.Context) {
+
+		u, err := strconv.Atoi(ctx.Params["u"])
+		check(err)
+
+		v, err := strconv.Atoi(ctx.Params["v"])
+		check(err)
+
+		fmt.Println(u, v)
+
+		node := globe.U_Array[u][v]
+
+		fmt.Println(node)
+
+		var result []byte
+
+		space := node.BoardSpace
+
+		if node.BoardSpace == nil {
+			space = &BoardSpace{PlayerID: 0, Armies: 0}
+			node.BoardSpace = space
+		}
+
+		result, err = json.Marshal(space)
+		check(err)
+		ctx.ContentType("json")
+		_, err = ctx.Write([]byte(result))
+		check(err)
+
+	}
+
 	// Static routers
 	web.Get("/", gamePageHandler)
 	web.Get("/(images/.*[.]png)", pngHandler)
@@ -74,8 +107,11 @@ func main() {
 	web.Get("/(shaders/.*[.]vert)", vertexShaderHandler)
 	web.Get("/(shaders/.*[.]frag)", fragmentShaderHandler)
 
-	// Rangom globe
+	// Serve globe terrain
 	web.Get("/globe", globeHandler)
+
+	// What do do when we clicked on a board space
+	web.Post("/click", clickHandler)
 
 	web.Run(":8080")
 
