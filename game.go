@@ -3,10 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/hoisie/web"
+	//"github.com/hoisie/web"
 	"io"
 	"os"
 	"strconv"
+	"web"
 )
 
 func check(err error) {
@@ -70,13 +71,13 @@ func main() {
 	}
 
 	clickHandler := func(ctx *web.Context) {
-
+		
 		u, err := strconv.Atoi(ctx.Params["u"])
 		check(err)
-
+		
 		v, err := strconv.Atoi(ctx.Params["v"])
 		check(err)
-
+		
 		fmt.Println(u, v)
 
 		node := globe.U_Array[u][v]
@@ -99,20 +100,36 @@ func main() {
 		check(err)
 
 	}
-
+	
+	authHandler := func(ctx *web.Context) {
+		
+		value, hasCookie := ctx.GetSecureCookie("user")
+		
+		fmt.Println(hasCookie, value)
+		
+	}
+	
+	server := web.NewServer()
+	
+	server.Config.CookieSecret = "todo~commissar165412399"
+	
 	// Static routers
-	web.Get("/", gamePageHandler)
-	web.Get("/(images/.*[.]png)", pngHandler)
-	web.Get("/(scripts/.*[.]js)", scriptHandler)
-	web.Get("/(shaders/.*[.]vert)", vertexShaderHandler)
-	web.Get("/(shaders/.*[.]frag)", fragmentShaderHandler)
-
+	server.Get("/", gamePageHandler)
+	server.Get("/(images/.*[.]png)", pngHandler)
+	server.Get("/(scripts/.*[.]js)", scriptHandler)
+	server.Get("/(shaders/.*[.]vert)", vertexShaderHandler)
+	server.Get("/(shaders/.*[.]frag)", fragmentShaderHandler)
+	
 	// Serve globe terrain
-	web.Get("/globe", globeHandler)
-
+	server.Get("/globe", globeHandler)
+	
 	// What do do when we clicked on a board space
-	web.Post("/click", clickHandler)
-
-	web.Run(":8080")
-
+	server.Post("/click", clickHandler)
+	server.Post("/auth", authHandler)
+	
+	server.Get("/echo", chatServer())
+	
+	server.Run(":8080")
+		
 }
+

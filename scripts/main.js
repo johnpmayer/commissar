@@ -1,11 +1,25 @@
 
 require(
-  ["jquery","utils","geodesic","mesh","scene","matrix","vector","lib/mjs"], 
-  function($,utils,geodesic,mesh,scene,matrix,vector,mjs){
+  ["jquery","utils","geodesic","mesh","scene","matrix","vector","lib/mjs","chat"], 
+  function($,       utils,  geodesic,  mesh,  scene,  matrix,  vector,  mjs,      chat){
     
     window.onerror = function(ev){alert("Error:" + ev)};
     
     $(function(){
+      
+      /*
+       * Chat
+       */
+      
+      chat.initChat(
+        "echo", 
+        $("#chatLog"),
+        $("#chatInput")
+      )
+      
+      /* 
+       * All sorts of graphics 
+       */
       
       //$('body').append("Hello, World!");
       var c = $('#c')[0];
