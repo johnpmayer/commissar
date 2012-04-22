@@ -2,10 +2,8 @@ package main
 
 import (
 	"fmt"
-	//	"github.com/hoisie/web"
 	"code.google.com/p/go.net/websocket"
-	//	"io"
-	"web"
+	"github.com/johnpmayer/web"
 )
 
 func echo(ws *websocket.Conn) {
