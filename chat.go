@@ -38,32 +38,48 @@ func upgradeWebsocketHandler(wsHandler websocket.Handler) interface{} {
 
 func chatServer() interface{} {
 
-	chatMux := make(chan string)
-	listeners := make([](chan string), 0, 10)
+	broadcast := make(chan string)
+	register := make(chan (chan string))
+	unregister := make(chan (chan string))
+	listeners := make(map[(chan string)]bool)
 
 	go func() {
-
+		
 		for {
-
-			msg := <-chatMux
-
-			// TODO: switch on adding a new listener
-
-			for i := 0; i < len(listeners); i += 1 {
-
-				listeners[i] <- msg
-
+			
+			select {
+				
+			case rcv := <- register:
+				
+				listeners[rcv] = true
+				
+			case rcv := <- unregister:
+				
+				delete(listeners, rcv)
+				
+			case msg := <-broadcast:
+				
+				// TODO: switch on adding a new listener
+				
+				for l := range listeners  {
+					
+					l <- msg
+					
+				}
+				
 			}
-
+			
 		}
 
 	}()
 	
-	broadcast := func(ws *websocket.Conn) {
+	chatHandler := func(ws *websocket.Conn) {
 		
 		rcv := make(chan string)
 		
-		listeners = append(listeners, rcv)
+		register <- rcv
+		
+		defer func() { unregister <- rcv }()
 		
 		go func() {
 			
@@ -83,11 +99,12 @@ func chatServer() interface{} {
 			err := websocket.Message.Receive(ws, &msg)
 			check(err)
 			
-			chatMux <- msg
+			broadcast <- msg
 			
 		}
 		
 	}
 	
-	return upgradeWebsocketHandler(websocket.Handler(broadcast))
+	return upgradeWebsocketHandler(websocket.Handler(chatHandler))
+
 }
