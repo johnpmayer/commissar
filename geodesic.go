@@ -21,7 +21,7 @@ type GeoNode struct {
 	Point      *Vector3
 	Locations  []UVIndex
 	Elevation  int
-	*BoardSpace
+	Space *BoardSpace
 }
 
 const MAX_ELEVATION = 1000
@@ -62,6 +62,8 @@ func MakeGeoNode(f, u, v, el int, vec *Vector3) *GeoNode {
 	p.Point = vec
 
 	p.Elevation = el
+
+  p.Space = &BoardSpace{PlayerID:0,Armies:0}
 
 	return p
 }

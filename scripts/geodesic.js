@@ -277,23 +277,19 @@ define(
         l.push(v.z);
       }
       
-      var addColor = function(elevation) {
-        if (elevation > mtnLevel) {
-          vertexColors.push(.5)
-          vertexColors.push(.5)
+      var addColor = function(playerId) {
+        if (playerId == 0) {
+          vertexColors.push(.7)
+          vertexColors.push(.7)
           vertexColors.push(0)
-        } else if (elevation > seaLevel) {
-          vertexColors.push(.4)
-          vertexColors.push(.8)
-          vertexColors.push(0)
-        } else if (elevation < deepLevel) {
-          vertexColors.push(.1)
-          vertexColors.push(.1)
-          vertexColors.push(.5)
+        } else if (playerId == 1) {
+          vertexColors.push(1)
+          vertexColors.push(1)
+          vertexColors.push(1)
         } else {
           vertexColors.push(0)
           vertexColors.push(0)
-          vertexColors.push(.6)
+          vertexColors.push(0)
         }
       }
       
@@ -318,8 +314,9 @@ define(
       
       var addGameSpace = function(node) {
         var neighbors = that.nodeNeighbors(node)
-        
+        console.log(node)
         var elevation = node.Elevation
+        var playerId = node.Space.PlayerID
         var vc = vector.convert(node.Point)
         
         var sortedNeighborVertices = []
@@ -389,7 +386,8 @@ define(
           addTriangle(v1,v2,v3)
           
           for (var j = 0; j < 3; j ++) {
-            addColor(elevation)
+            //addColor(elevation)
+            addColor(playerId)
           }
           
         }
@@ -428,7 +426,8 @@ define(
 
       
     }
-    
+   
+    /*
     function generateTriangleMesh(geoMesh, callback) {
       
       var f = this.Frequency
@@ -545,6 +544,7 @@ define(
       geoMesh.build(meshAttributes, callback)
       
     }
+    */
     
     function initGeodesic(obj) {
       

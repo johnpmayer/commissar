@@ -85,12 +85,14 @@ func main() {
 
 		var result []byte
 
-		space := node.BoardSpace
+		space := node.Space
 
-		if node.BoardSpace == nil {
+		if node.Space == nil {
 			space = &BoardSpace{PlayerID: 0, Armies: 0}
-			node.BoardSpace = space
+			node.Space = space
 		}
+
+    space.PlayerID = (space.PlayerID + 1) % 3
 
 		result, err = json.Marshal(space)
 		check(err)
