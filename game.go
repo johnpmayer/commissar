@@ -3,7 +3,7 @@ package    main
 import    (
 	"encoding/json"
 	"fmt"
-	"github.com/johnpmayer/web"
+	"github.com/hoisie/web"
 	"io"
 	"os"
 	"strconv"
