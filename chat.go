@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"code.google.com/p/go.net/websocket"
-	"github.com/johnpmayer/web"
+	"github.com/hoisie/web"
 )
 
 func echo(ws *websocket.Conn) {
