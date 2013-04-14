@@ -1,5 +1,5 @@
-package main
+package    main
 
-type BoardSpace struct {
-	PlayerID, Armies int
+type    BoardSpace    struct    {
+	PlayerID,    Armies    int
 }

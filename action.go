@@ -1,40 +1,15 @@
 package    main
 
 import    (
-	"fmt"
+        "encoding/json"
 	"code.google.com/p/go.net/websocket"
-	"github.com/johnpmayer/web"
 )
 
-func    echo(ws    *websocket.Conn)    {
-
-	fmt.Println("Opened    websocket")
-	
-	for    {
-
-		var    msg    string
-		var    err    error
-
-		err    =    websocket.Message.Receive(ws,    &msg)
-		check(err)
-
-		fmt.Println(msg)
-
-		err    =    websocket.Message.Send(ws,    msg)
-		check(err)
-
-	}
-
-	fmt.Println("Finished    copying    websocket")
+type    gameAction    struct    {
+        u,    v    int
 }
 
-func    upgradeWebsocketHandler(wsHandler    websocket.Handler)    interface{}    {
-	return    func(ctx    *web.Context)    {
-		wsHandler.ServeHTTP(ctx.ResponseWriter,    ctx.Request)
-	}
-}
-
-func    chatServer()    interface{}    {
+func    actionServer(globe    *Geodesic)    interface{}    {
 
 	broadcast    :=    make(chan    string)
 	register    :=    make(chan    (chan    string))
@@ -58,10 +33,24 @@ func    chatServer()    interface{}    {
 			case    msg    :=    <-broadcast:
 				
 				//    TODO:    switch    on    adding    a    new    listener
-				
-				for    l    :=    range    listeners        {
-					
-					l    <-    msg
+			        
+                                var    action    gameAction
+
+                                err    :=    json.Unmarshal([]byte(msg),    action)
+                                if    err    !=    nil    {
+                                        continue
+                                }
+
+                                node    :=    globe.U_Array[action.u][action.v]
+                                space    :=    node.Space
+                                space.PlayerID    =    (space.PlayerID    +    1)    %    3
+
+                                rsp,    err    :=    json.Marshal(node)
+                                check(err)
+
+				for    l    :=    range    listeners        {	
+
+					l    <-    string(rsp)
 					
 				}
 				
@@ -71,7 +60,7 @@ func    chatServer()    interface{}    {
 
 	}()
 	
-	chatHandler    :=    func(ws    *websocket.Conn)    {
+	actionHandler    :=    func(ws    *websocket.Conn)    {
 		
 		rcv    :=    make(chan    string)
 		
@@ -103,6 +92,6 @@ func    chatServer()    interface{}    {
 		
 	}
 	
-	return    upgradeWebsocketHandler(websocket.Handler(chatHandler))
+	return    upgradeWebsocketHandler(websocket.Handler(actionHandler))
 
 }
